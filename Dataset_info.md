@@ -106,4 +106,3 @@ This spatial reference table maps Brazilian postal code prefixes to precise geog
 
 ---
 
-[Back to Main README](./README.md)
