@@ -363,26 +363,7 @@ These constraints help ensure that the relational structure of the Olist dataset
 
 ---
 
-# 📍 3. Orphan ZIP-Code Handling
-
-During the relational modeling process, ZIP codes were checked across the customer/seller tables and the geolocation table.
-
-Some ZIP codes existed in customer or seller records but were not present in the compressed geolocation dataset.
-
-Instead of removing those customer or seller records, missing ZIP codes were inserted into `stg_geolocation` using placeholder values:
-
-```text
-Latitude  → 0
-Longitude → 0
-City      → Unknown
-State     → Unknown
-```
-
-This allows the foreign-key relationships to be established without losing the corresponding customer or seller records.
-
----
-
-# 📅 4. Date Dimension
+# 📅 3. Date Dimension
 
 A dedicated `dim_date` table was created for time-based analysis.
 
@@ -407,7 +388,7 @@ This prepares the database for time-based reporting and future Power BI time-int
 
 ---
 
-# 👁️ 5. Analytical Dimension & Fact Views
+# 👁️ 4. Analytical Dimension & Fact Views
 
 Instead of directly exposing the raw staging tables to the reporting layer, analytical SQL views were created.
 
@@ -513,56 +494,6 @@ The analytical views provide a structured layer for downstream reporting and Pow
 
 ---
 
-# 🧩 SQL Engineering Challenges & Solutions
-
-## 1. Geolocation Primary Key Metadata Issue
-
-### Problem
-
-SQL Server requires a primary-key column to be non-nullable.
-
-The compressed geolocation table initially had the ZIP-code column configured as nullable.
-
-### Solution
-
-The column was explicitly changed to:
-
-```sql
-INT NOT NULL
-```
-
-before applying the primary key constraint.
-
-`GO` batch separators were used to ensure the structural changes were committed before adding the constraint.
-
----
-
-## 2. Referential Integrity and Missing ZIP Codes
-
-### Problem
-
-Customer and seller ZIP codes were found that did not exist in the compressed geolocation table.
-
-This prevented foreign-key constraints from being established.
-
-### Solution
-
-The missing ZIP codes were identified using SQL queries and inserted into the geolocation table with placeholder geographic values.
-
-This allowed the relationships to be created while retaining the original customer and seller records.
-
----
-
-## 3. Cross-Table Datatype Alignment
-
-Relational key columns uploaded from Python did not always have matching SQL Server datatypes.
-
-For example, ZIP-code columns required alignment between customer/seller tables and the geolocation table.
-
-Targeted `ALTER COLUMN` statements were used to standardize these datatypes before creating the relationships.
-
----
-
 # 📊 Phase 4: Power BI Reporting — Currently In Progress
 
 The Power BI layer is **currently being developed**.
@@ -617,33 +548,6 @@ The planned reporting layer will focus on areas such as:
 | Power BI Data Modeling | 🚧 In Progress |
 | DAX Measures | 🚧 In Progress |
 | Power BI Dashboards | 🚧 In Progress |
-
----
-
-# 📁 Project Structure
-
-```text
-Olist-E-Commerce-Data-Engineering/
-│
-├── Dataset/
-│   ├── olist_customers_dataset.csv
-│   ├── olist_orders_dataset.csv
-│   ├── olist_order_items_dataset.csv
-│   ├── olist_order_payments_dataset.csv
-│   ├── olist_order_reviews_dataset.csv
-│   ├── olist_products_dataset.csv
-│   ├── olist_sellers_dataset.csv
-│   ├── olist_geolocation_dataset.csv
-│   └── product_category_name_translation.csv
-│
-├── notebooks/
-│   └── Olist_EndtoEnd_Pipeline.ipynb
-│
-├── sql/
-│   └── SQL_Warehouse_Modeling.sql
-│
-└── README.md
-```
 
 ---
 
