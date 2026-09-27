@@ -1,4 +1,4 @@
-# 🇧🇷 Olist E-Commerce Data Engineering & Analytics Project
+# Olist E-Commerce Data Engineering & Analytics Project
 
 End-to-end Data Engineering and Analytics project built using **Python, SQL Server, and Power BI** to clean, transform, model, and analyze over 100k Brazilian e-commerce orders.
 
