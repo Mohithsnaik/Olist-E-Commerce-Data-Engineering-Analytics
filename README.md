@@ -469,7 +469,7 @@ stg_geolocation
 
 ```text
                     ┌─────────────────┐
-                    │  v_dim_customers │
+                    │  v_dim_customers│
                     └────────┬────────┘
                              │
                              ▼
